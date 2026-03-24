@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Send File — CryptSend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+  <div class="paper-texture"></div>
+  <div class="scanlines"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" style="text-decoration:none">
+        <span class="logo-hex">⬡</span>
+        <span class="logo-name">CryptSend</span>
+      </a>
+      <nav class="site-nav">
+        <a href="index.html" class="nav-a">Home</a>
+        <a href="receive.html" class="nav-a nav-recv">↓ Receive</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="pg-header">
+    <div class="pg-header-inner">
+      <a href="index.html" class="pg-back">← Back</a>
+      <h1 class="pg-title">📤 Send a File</h1>
+      <p class="pg-sub">Follow the 4 steps below. Everything is encrypted locally — your file never leaves your device in plain form.</p>
+    </div>
+  </div>
+
+  <main class="pg-body">
+
+    <!-- ═══ STEP 1: GENERATE KEYS ═══ -->
+    <div class="step-panel active" id="panel1">
+      <div class="sp-head">
+        <div class="sp-num">1</div>
+        <div class="sp-title">Generate RSA Keys</div>
+        <div class="sp-badge" id="badge1">Pending</div>
+      </div>
+      <div class="sp-body">
+        <p style="font-size:.85rem;color:var(--ink-2);margin-bottom:1.1rem;">
+          Click the button to generate a unique RSA-2048 keypair in your browser. This creates the lock and key for your file transfer.
+        </p>
+        <button class="btn btn-ink btn-lg btn-full" id="btnGenKeys">
+          🔑 Generate RSA-2048 Keys
+        </button>
+
+        <div class="prog-wrap" id="prog1">
+          <div class="prog-head"><span class="prog-lbl" id="lbl1">Initializing...</span><span class="prog-pct" id="pct1">0%</span></div>
+          <div class="prog-track"><div class="prog-fill" id="fill1" style="width:0%"></div></div>
+        </div>
+        <div class="log-term" id="log1"></div>
+        <div class="status" id="st1"></div>
+
+        <div id="keyResult" style="display:none;margin-top:1rem;">
+          <div class="key-row">
+            <div class="key-col">
+              <div class="key-label">Public Key</div>
+              <div class="key-box" id="pubKeyBox">—</div>
+            </div>
+            <div class="key-col">
+              <div class="key-label">Private Key</div>
+              <div class="key-box" id="privKeyBox">—</div>
+            </div>
+          </div>
+          <div id="fpVisual" style="display:none" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2: SELECT FILE ═══ -->
+    <div class="step-panel locked" id="panel2">
+      <div class="sp-head">
+        <div class="sp-num">2</div>
+        <div class="sp-title">Select File</div>
+        <div class="sp-badge" id="badge2">Locked</div>
+      </div>
+      <div class="sp-body">
+        <div class="dropzone" id="dropzone">
+          <span class="dz-icon">📂</span>
+          <div class="dz-text">Drop your file here, or click to browse</div>
+          <div class="dz-sub">Any file type · Max 100MB</div>
+          <input type="file" id="fileInput"/>
+        </div>
+        <div class="file-preview" id="filePreview">
+          <span class="fp-icon" id="fpIco">📄</span>
+          <div class="fp-info">
+            <div class="fp-name" id="fpName">—</div>
+            <div class="fp-size" id="fpSize">—</div>
+          </div>
+          <button class="fp-rm" id="btnRemove">✕</button>
+        </div>
+        <div class="status" id="st2"></div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 3: ENCRYPT ═══ -->
+    <div class="step-panel locked" id="panel3">
+      <div class="sp-head">
+        <div class="sp-num">3</div>
+        <div class="sp-title">Encrypt File</div>
+        <div class="sp-badge" id="badge3">Locked</div>
+      </div>
+      <div class="sp-body">
+        <p style="font-size:.85rem;color:var(--ink-2);margin-bottom:1.1rem;">
+          AES-256-GCM encrypts your file locally. The AES key is then sealed with your RSA public key. Watch the progress below.
+        </p>
+        <button class="btn btn-amber btn-lg btn-full" id="btnEncrypt" disabled>
+          🔒 Encrypt File
+        </button>
+        <div class="prog-wrap" id="prog3">
+          <div class="prog-head"><span class="prog-lbl" id="lbl3">Waiting...</span><span class="prog-pct" id="pct3">0%</span></div>
+          <div class="prog-track"><div class="prog-fill" id="fill3" style="width:0%"></div></div>
+        </div>
+        <div class="log-term" id="log3"></div>
+        <div class="status" id="st3"></div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4: SEND ═══ -->
+    <div class="step-panel locked" id="panel4">
+      <div class="sp-head">
+        <div class="sp-num">4</div>
+        <div class="sp-title">Send to Server</div>
+        <div class="sp-badge" id="badge4">Locked</div>
+      </div>
+      <div class="sp-body">
+
+        <div style="margin-bottom:1rem;">
+          <div class="toggle-row">
+            <span class="toggle-lbl">🗑 Delete after first download</span>
+            <label class="tog"><input type="checkbox" id="chkDelete" checked/><span class="tog-sl"></span></label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-lbl">📱 Show QR code for sharing</span>
+            <label class="tog"><input type="checkbox" id="chkQR" checked/><span class="tog-sl"></span></label>
+          </div>
+        </div>
+
+        <button class="btn btn-ink btn-lg btn-full" id="btnSend" disabled>
+          ↑ Upload & Get Code
+        </button>
+        <div class="prog-wrap" id="prog4">
+          <div class="prog-head"><span class="prog-lbl" id="lbl4">Waiting...</span><span class="prog-pct" id="pct4">0%</span></div>
+          <div class="prog-track"><div class="prog-fill" id="fill4" style="width:0%"></div></div>
+        </div>
+        <div class="log-term" id="log4"></div>
+        <div class="status" id="st4"></div>
+
+        <!-- Code reveal -->
+        <div class="code-reveal" id="codeReveal">
+          <div class="code-reveal-lbl">🎯 Share This Code with Your Recipient</div>
+          <div class="code-digits" id="codeDigits"></div>
+          <div class="code-actions">
+            <button class="btn btn-ink" id="btnCopyCode">📋 Copy Code</button>
+            <button class="btn btn-outline" id="btnSendAnother">↺ Send Another</button>
+          </div>
+          <div class="code-expire" id="codeExpire"></div>
+        </div>
+
+        <!-- QR -->
+        <div class="qr-wrap" id="qrWrap">
+          <div class="key-label" style="margin-bottom:.7rem;">📱 Or Scan This QR Code</div>
+          <div id="qrContainer"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/crypto.js"></script>
+  <script src="js/send.js"></script>
+</body>
+</html>

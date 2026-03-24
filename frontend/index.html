@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CryptSend — Encrypted File Transfer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+  <div class="paper-texture"></div>
+  <div class="scanlines"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-hex">⬡</span>
+        <span class="logo-name">CryptSend</span>
+      </div>
+      <nav class="site-nav">
+        <a href="#how" class="nav-a">Protocol</a>
+        <a href="send.html" class="nav-a nav-send">↑ Send</a>
+        <a href="receive.html" class="nav-a nav-recv">↓ Receive</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-left">
+      <div class="hero-stamp animate-up" style="--d:.05s">
+        <span class="stamp-dot"></span> RSA-2048 · AES-256-GCM · Zero Knowledge
+      </div>
+      <h1 class="hero-h1 animate-up" style="--d:.15s">
+        Send Files.<br><em>Completely</em><br>Private.
+      </h1>
+      <p class="hero-p animate-up" style="--d:.28s">
+        Military-grade hybrid encryption. Your file is locked in the browser before it ever leaves your device. Share with just a 6-digit code.
+      </p>
+      <div class="hero-btns animate-up" style="--d:.4s">
+        <a href="send.html" class="btn-hero-send">
+          <span>↑</span> Send a File
+        </a>
+        <a href="receive.html" class="btn-hero-recv">
+          <span>↓</span> Receive a File
+        </a>
+      </div>
+      <div class="hero-pills animate-up" style="--d:.52s">
+        <span class="pill">🔒 No Account</span>
+        <span class="pill">⚡ Auto-Delete</span>
+        <span class="pill">📱 Mobile Ready</span>
+        <span class="pill">🌐 Open Source</span>
+      </div>
+    </div>
+    <div class="hero-right animate-up" style="--d:.35s">
+      <div class="term-card">
+        <div class="term-topbar">
+          <span class="tb-dot r"></span><span class="tb-dot y"></span><span class="tb-dot g"></span>
+          <span class="tb-name">cryptsend.log</span>
+        </div>
+        <div class="term-lines" id="termLines">
+          <div class="tl"><span class="tl-p">$</span><span class="tl-c"> init --rsa 2048</span></div>
+          <div class="tl tl-dim">// Generating keypair...</div>
+          <div class="tl"><span class="tl-ok">✓</span> Public key ready</div>
+          <div class="tl"><span class="tl-ok">✓</span> Private key secured</div>
+          <div class="tl tl-dim">// AES-256-GCM encrypt...</div>
+          <div class="tl"><span class="tl-ok">✓</span> File encrypted <span class="tl-val">4.2MB → 4.2MB</span></div>
+          <div class="tl"><span class="tl-ok">✓</span> AES key wrapped with RSA</div>
+          <div class="tl tl-dim">// Uploading ciphertext...</div>
+          <div class="tl"><span class="tl-ok">✓</span> Uploaded to cloud</div>
+          <div class="tl tl-code">► CODE: <span class="tl-big">4 8 2 9 1 5</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="section-wrap">
+      <div class="s-eyebrow">Protocol</div>
+      <h2 class="s-title">How It Works</h2>
+      <div class="steps-row">
+        <div class="step-card" style="--si:0">
+          <div class="step-no">01</div>
+          <div class="step-ico">🔑</div>
+          <h3>Generate Keys</h3>
+          <p>Click a button — your browser creates a unique RSA-2048 keypair. Your private key never leaves your device.</p>
+        </div>
+        <div class="step-arr">→</div>
+        <div class="step-card" style="--si:1">
+          <div class="step-no">02</div>
+          <div class="step-ico">🔒</div>
+          <h3>Encrypt File</h3>
+          <p>AES-256-GCM encrypts your file locally. The AES key is then sealed with your RSA public key.</p>
+        </div>
+        <div class="step-arr">→</div>
+        <div class="step-card" style="--si:2">
+          <div class="step-no">03</div>
+          <div class="step-ico">☁</div>
+          <h3>Send & Get Code</h3>
+          <p>Encrypted blob goes to the cloud. You get a 6-digit code to share. Zero plaintext on server.</p>
+        </div>
+        <div class="step-arr">→</div>
+        <div class="step-card" style="--si:3">
+          <div class="step-no">04</div>
+          <div class="step-ico">📥</div>
+          <h3>Receive & Delete</h3>
+          <p>Receiver enters code → file decrypts in their browser → server deletes the file permanently.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <h2>Ready to Send Securely?</h2>
+      <p>No signup. No tracking. Deleted after download.</p>
+      <div class="cta-btns">
+        <a href="send.html" class="btn-hero-send">↑ Start Sending</a>
+        <a href="receive.html" class="btn-hero-recv">↓ Enter a Code</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>⬡ CryptSend — Encrypted by default, private by design.</span>
+      <span class="footer-r">Web Crypto API · RSA-OAEP · AES-GCM</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
