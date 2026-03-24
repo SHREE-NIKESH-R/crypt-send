@@ -7,7 +7,7 @@
  */
 
 // ── CONFIG ── Change this to your deployed backend URL ──────────
-const API = "https://cryptsend-abc.onrender.com";
+const API = "https://crypt-send.onrender.com";
 // For local testing use: const API = 'http://localhost:8000';
 
 // ── STATE ────────────────────────────────────────────────────────
@@ -20,66 +20,66 @@ let encryptedPayload = null; // { encB64, wrappedKey }
 
 // ── HELPERS ──────────────────────────────────────────────────────
 function setProgress(fillId, lblId, pctId, pct, label, state) {
-  const fill = document.getElementById(fillId);
-  const lbl = document.getElementById(lblId);
-  const pctEl = document.getElementById(pctId);
-  fill.style.width = pct + "%";
-  lbl.textContent = label;
-  pctEl.textContent = pct + "%";
-  fill.className =
-    "prog-fill" +
-    (state === "done" ? " done" : state === "error" ? " error" : "");
+    const fill = document.getElementById(fillId);
+    const lbl = document.getElementById(lblId);
+    const pctEl = document.getElementById(pctId);
+    fill.style.width = pct + "%";
+    lbl.textContent = label;
+    pctEl.textContent = pct + "%";
+    fill.className =
+      "prog-fill" +
+      (state === "done" ? " done" : state === "error" ? " error" : "");
 }
 
 function showProg(id) {
-  document.getElementById(id).classList.add("show");
+    document.getElementById(id).classList.add("show");
 }
 
 function addLog(logId, type, msg) {
-  const el = document.getElementById(logId);
-  el.classList.add("show");
-  const row = document.createElement("div");
-  row.className = "log-line";
-  const ts = new Date().toTimeString().slice(0, 8);
-  const icons = { ok: "✓", inf: "›", err: "✗" };
-  const cls = { ok: "log-ok", inf: "log-inf", err: "log-err" };
-  row.innerHTML = `<span class="log-ts">[${ts}]</span><span class="${cls[type]}">${icons[type]}</span><span>${msg}</span>`;
-  el.appendChild(row);
-  el.scrollTop = el.scrollHeight;
+    const el = document.getElementById(logId);
+    el.classList.add("show");
+    const row = document.createElement("div");
+    row.className = "log-line";
+    const ts = new Date().toTimeString().slice(0, 8);
+    const icons = { ok: "✓", inf: "›", err: "✗" };
+    const cls = { ok: "log-ok", inf: "log-inf", err: "log-err" };
+    row.innerHTML = `<span class="log-ts">[${ts}]</span><span class="${cls[type]}">${icons[type]}</span><span>${msg}</span>`;
+    el.appendChild(row);
+    el.scrollTop = el.scrollHeight;
 }
 
 function setStatus(id, type, msg) {
-  const el = document.getElementById(id);
-  el.className = `status ${type} show`;
-  el.textContent = msg;
+    const el = document.getElementById(id);
+    el.className = `status ${type} show`;
+    el.textContent = msg;
 }
 
 function unlockPanel(n) {
-  const p = document.getElementById("panel" + n);
-  p.classList.remove("locked");
-  p.classList.add("active");
-  document.getElementById("badge" + n).textContent = "Active";
-  p.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    const p = document.getElementById("panel" + n);
+    p.classList.remove("locked");
+    p.classList.add("active");
+    document.getElementById("badge" + n).textContent = "Active";
+    p.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function donePanel(n, msg) {
-  const p = document.getElementById("panel" + n);
-  p.classList.remove("active");
-  p.classList.add("done");
-  document.getElementById("badge" + n).textContent = "✓ Done";
+    const p = document.getElementById("panel" + n);
+    p.classList.remove("active");
+    p.classList.add("done");
+    document.getElementById("badge" + n).textContent = "✓ Done";
 }
 
 function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
+    return new Promise((r) => setTimeout(r, ms));
 }
 
 function readBuf(file) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = (e) => res(e.target.result);
-    r.onerror = rej;
-    r.readAsArrayBuffer(file);
-  });
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = (e) => res(e.target.result);
+      r.onerror = rej;
+      r.readAsArrayBuffer(file);
+    });
 }
 
 // ── STEP 1: GENERATE KEYS ────────────────────────────────────────
@@ -155,51 +155,51 @@ const fi = document.getElementById("fileInput");
 dz.addEventListener("click", () => fi.click());
 fi.addEventListener("change", (e) => handleFile(e.target.files[0]));
 dz.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  dz.classList.add("over");
+    e.preventDefault();
+    dz.classList.add("over");
 });
 dz.addEventListener("dragleave", () => dz.classList.remove("over"));
 dz.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dz.classList.remove("over");
-  handleFile(e.dataTransfer.files[0]);
+    e.preventDefault();
+    dz.classList.remove("over");
+    handleFile(e.dataTransfer.files[0]);
 });
 document.getElementById("btnRemove").addEventListener("click", clearFile);
 
 function handleFile(file) {
-  if (!file) return;
-  if (file.size > 100 * 1024 * 1024) {
-    setStatus("st2", "err", "✗ File too large. Maximum is 100MB.");
-    return;
-  }
-  selectedFile = file;
-  document.getElementById("fpIco").textContent = Crypto.fileIcon(file.name);
-  document.getElementById("fpName").textContent = file.name;
-  document.getElementById("fpSize").textContent = Crypto.fmtSize(file.size);
-  document.getElementById("filePreview").classList.add("show");
-  document.getElementById("st2").className = "status";
+    if (!file) return;
+    if (file.size > 100 * 1024 * 1024) {
+      setStatus("st2", "err", "✗ File too large. Maximum is 100MB.");
+      return;
+    }
+    selectedFile = file;
+    document.getElementById("fpIco").textContent = Crypto.fileIcon(file.name);
+    document.getElementById("fpName").textContent = file.name;
+    document.getElementById("fpSize").textContent = Crypto.fmtSize(file.size);
+    document.getElementById("filePreview").classList.add("show");
+    document.getElementById("st2").className = "status";
 
-  // Unlock step 3
-  const p3 = document.getElementById("panel3");
-  p3.classList.remove("locked");
-  p3.classList.add("active");
-  document.getElementById("badge3").textContent = "Active";
-  document.getElementById("btnEncrypt").disabled = false;
-  donePanel(2);
-  document.getElementById("badge2").textContent = "✓ Done";
+    // Unlock step 3
+    const p3 = document.getElementById("panel3");
+    p3.classList.remove("locked");
+    p3.classList.add("active");
+    document.getElementById("badge3").textContent = "Active";
+    document.getElementById("btnEncrypt").disabled = false;
+    donePanel(2);
+    document.getElementById("badge2").textContent = "✓ Done";
 }
 
 function clearFile() {
-  selectedFile = null;
-  fi.value = "";
-  document.getElementById("filePreview").classList.remove("show");
-  const p3 = document.getElementById("panel3");
-  p3.classList.remove("active");
-  p3.classList.add("locked");
-  document.getElementById("badge3").textContent = "Locked";
-  document.getElementById("btnEncrypt").disabled = true;
-  document.getElementById("panel2").classList.remove("done");
-  document.getElementById("badge2").textContent = "Active";
+    selectedFile = null;
+    fi.value = "";
+    document.getElementById("filePreview").classList.remove("show");
+    const p3 = document.getElementById("panel3");
+    p3.classList.remove("active");
+    p3.classList.add("locked");
+    document.getElementById("badge3").textContent = "Locked";
+    document.getElementById("btnEncrypt").disabled = true;
+    document.getElementById("panel2").classList.remove("done");
+    document.getElementById("badge2").textContent = "Active";
 }
 
 // ── STEP 3: ENCRYPT ──────────────────────────────────────────────
@@ -338,34 +338,34 @@ document.getElementById("btnSend").addEventListener("click", async () => {
 });
 
 function showCode(code, deleteAfter) {
-  const rev = document.getElementById("codeReveal");
-  rev.classList.add("show");
-  const digs = document.getElementById("codeDigits");
-  digs.innerHTML = "";
-  code.split("").forEach((d, i) => {
-    const el = document.createElement("div");
-    el.className = "code-d";
-    el.style.setProperty("--di", i * 0.07 + "s");
-    el.textContent = d;
-    digs.appendChild(el);
-  });
-  const exp = new Date(Date.now() + 86400000);
-  document.getElementById("codeExpire").textContent =
-    `⏱ Expires ${exp.toLocaleString()}` +
-    (deleteAfter
-      ? " · 🗑 Deleted after first download"
-      : " · ♻ Multiple downloads allowed");
+    const rev = document.getElementById("codeReveal");
+    rev.classList.add("show");
+    const digs = document.getElementById("codeDigits");
+    digs.innerHTML = "";
+    code.split("").forEach((d, i) => {
+      const el = document.createElement("div");
+      el.className = "code-d";
+      el.style.setProperty("--di", i * 0.07 + "s");
+      el.textContent = d;
+      digs.appendChild(el);
+    });
+    const exp = new Date(Date.now() + 86400000);
+    document.getElementById("codeExpire").textContent =
+      `⏱ Expires ${exp.toLocaleString()}` +
+      (deleteAfter
+        ? " · 🗑 Deleted after first download"
+        : " · ♻ Multiple downloads allowed");
 }
 
 document.getElementById("btnCopyCode").addEventListener("click", () => {
-  const code = Array.from(document.querySelectorAll(".code-d"))
-    .map((e) => e.textContent)
-    .join("");
-  navigator.clipboard.writeText(code).then(() => {
-    const btn = document.getElementById("btnCopyCode");
-    btn.textContent = "✅ Copied!";
-    setTimeout(() => (btn.textContent = "📋 Copy Code"), 2000);
-  });
+    const code = Array.from(document.querySelectorAll(".code-d"))
+      .map((e) => e.textContent)
+      .join("");
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.getElementById("btnCopyCode");
+      btn.textContent = "✅ Copied!";
+      setTimeout(() => (btn.textContent = "📋 Copy Code"), 2000);
+    });
 });
 
 document
